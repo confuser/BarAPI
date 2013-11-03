@@ -2,12 +2,15 @@ package me.confuser.barapi;
 
 import java.util.HashMap;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -42,6 +45,44 @@ public class BarAPI extends JavaPlugin implements Listener {
 		quit(event.getPlayer());
 	}
 
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerTeleport(final PlayerTeleportEvent event) {
+		handleTeleport(event.getPlayer(), event.getTo().clone());
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerTeleport(final PlayerRespawnEvent event) {
+		handleTeleport(event.getPlayer(), event.getRespawnLocation().clone());
+	}
+
+	private void handleTeleport(final Player player, final Location loc) {
+
+		if (!hasBar(player))
+			return;
+
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+
+			@Override
+			public void run() {
+				FakeDragon oldDragon = getDragon(player, "");
+
+				float health = oldDragon.health;
+				String message = oldDragon.name;
+
+				Object destroyPacket = getDragon(player, "").getDestroyEntityPacket();
+				Util.sendPacket(player, destroyPacket);
+
+				players.remove(player.getName());
+
+				FakeDragon dragon = addDragon(player, loc, message);
+				dragon.health = health;
+
+				sendDragon(dragon, player);
+			}
+
+		}, 2L);
+	}
+
 	private void quit(Player player) {
 		removeBar(player);
 	}
@@ -57,7 +98,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 		sendDragon(dragon, player);
 
 	}
-	
+
 	public static void setMessage(Player player, String message, float percent) {
 		FakeDragon dragon = getDragon(player, message);
 
@@ -114,7 +155,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 		cancelTimer(player);
 	}
-	
+
 	public static void setHealth(Player player, float percent) {
 		if (!hasBar(player))
 			return;
@@ -159,6 +200,17 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 	private static FakeDragon addDragon(Player player, String message) {
 		FakeDragon dragon = new FakeDragon(message, ENTITY_ID, player.getLocation().add(0, -200, 0));
+
+		Object mobPacket = dragon.getMobPacket();
+		Util.sendPacket(player, mobPacket);
+
+		players.put(player.getName(), dragon);
+
+		return dragon;
+	}
+
+	private static FakeDragon addDragon(Player player, Location loc, String message) {
+		FakeDragon dragon = new FakeDragon(message, ENTITY_ID, loc.add(0, -200, 0));
 
 		Object mobPacket = dragon.getMobPacket();
 		Util.sendPacket(player, mobPacket);
