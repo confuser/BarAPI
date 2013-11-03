@@ -5,6 +5,17 @@
 	<artifactId>BarAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<build>
+		<finalName>BarAPI</finalName>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>${basedir}</directory>
+				<includes>
+					<include>*.yml</include>
+				</includes>
+			</resource>
+		</resources>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
 			<plugin>
