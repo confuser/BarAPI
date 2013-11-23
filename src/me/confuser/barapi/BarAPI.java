@@ -167,6 +167,22 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 		sendDragon(dragon, player);
 	}
+	
+	public static float getHealth(Player player) {
+		if (!hasBar(player))
+			return -1;
+		
+		
+		return getDragon(player, "").health;
+	}
+	
+	public static String getMessage(Player player) {
+		if (!hasBar(player))
+			return "";
+		
+		
+		return getDragon(player, "").name;
+	}
 
 	private static String cleanMessage(String message) {
 		if (message.length() > 64)
