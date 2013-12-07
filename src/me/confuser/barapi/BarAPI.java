@@ -5,6 +5,7 @@ import java.util.HashMap;
 import me.confuser.barapi.nms.FakeDragon;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,6 +36,18 @@ public class BarAPI extends JavaPlugin implements Listener {
 		getLogger().info("Loaded");
 
 		plugin = this;
+
+		/* Test
+		plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+
+			@Override
+			public void run() {
+				for (Player player : plugin.getServer().getOnlinePlayers()) {
+					BarAPI.setMessage(player, ChatColor.AQUA + "Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI", 10);
+				}
+			}
+
+		}, 30L, 300L);*/
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -184,7 +197,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 	private static String cleanMessage(String message) {
 		if (message.length() > 64)
-			return message.substring(0, 63);
+			message = message.substring(0, 63);
 
 		return message;
 	}
@@ -206,7 +219,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 		if (hasBar(player)) {
 			return players.get(player.getName());
 		} else
-			return addDragon(player, message);
+			return addDragon(player, cleanMessage(message));
 	}
 
 	private static FakeDragon addDragon(Player player, String message) {
