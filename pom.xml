@@ -33,11 +33,6 @@
 			<id>bukkit-repo</id>
 			<url>http://repo.bukkit.org/content/groups/public</url>
 		</repository>
-		<repository>
-			<id>comphenix-rep</id>
-			<name>Comphenix Repository</name>
-			<url>http://repo.comphenix.net/content/groups/public</url>
-		</repository>
 	</repositories>
 	<dependencies>
 		<dependency> <!-- Bukkit implementation -->
@@ -55,13 +50,6 @@
 			<scope>compile</scope>
 			<type>jar</type>
 			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.comphenix.protocol</groupId>
-			<artifactId>ProtocolLib</artifactId>
-			<version>LATEST</version>
-			<type>jar</type>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 </project>
