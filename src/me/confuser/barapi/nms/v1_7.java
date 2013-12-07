@@ -61,7 +61,17 @@ public class v1_7 extends FakeDragon {
 			Class<?> PacketPlayOutSpawnEntityLiving = Util.getCraftClass("PacketPlayOutSpawnEntityLiving");
 
 			packet = PacketPlayOutSpawnEntityLiving.getConstructor(new Class<?>[] { EntityLiving }).newInstance(dragon);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 
@@ -78,7 +88,15 @@ public class v1_7 extends FakeDragon {
 			Field a = PacketPlayOutEntityDestroy.getDeclaredField("a");
 			a.setAccessible(true);
 			a.set(packet, new int[] { id });
-		} catch (InstantiationException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 
@@ -94,7 +112,17 @@ public class v1_7 extends FakeDragon {
 		Object packet = null;
 		try {
 			packet = PacketPlayOutEntityMetadata.getConstructor(new Class<?>[] { int.class, DataWatcher, boolean.class }).newInstance(id, watcher, true);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 
@@ -106,9 +134,20 @@ public class v1_7 extends FakeDragon {
 		Class<?> PacketPlayOutEntityTeleport = Util.getCraftClass("PacketPlayOutEntityTeleport");
 
 		Object packet = null;
+
 		try {
 			packet = PacketPlayOutEntityTeleport.getConstructor(new Class<?>[] { int.class, int.class, int.class, int.class, byte.class, byte.class }).newInstance(this.id, loc.getBlockX() * 32, loc.getBlockY() * 32, loc.getBlockZ() * 32, (byte) ((int) loc.getYaw() * 256 / 360), (byte) ((int) loc.getPitch() * 256 / 360));
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 
@@ -131,10 +170,25 @@ public class v1_7 extends FakeDragon {
 			a.invoke(watcher, 8, (Byte) (byte) 0);
 			a.invoke(watcher, 10, name);
 			a.invoke(watcher, 11, (Byte) (byte) 1);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+		} catch (IllegalArgumentException e) {
+
+			e.printStackTrace();
+		} catch (SecurityException e) {
+
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+
 			e.printStackTrace();
 		}
 		return watcher;
 	}
-
 }

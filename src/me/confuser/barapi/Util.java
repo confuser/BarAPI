@@ -45,8 +45,17 @@ public class Util {
 
 		try {
 			fakeDragon = (FakeDragon) fakeDragonClass.getConstructor(String.class, Location.class).newInstance(message, loc);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			// TODO Auto-generated catch block
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		}
 
