@@ -3,21 +3,55 @@ package me.confuser.barapi;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import me.confuser.barapi.nms.FakeDragon;
+import me.confuser.barapi.nms.v1_6;
+import me.confuser.barapi.nms.v1_7;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 /**
- * This is a utility class for BarAPI.
- * It is based on the code by SoThatsIt.
+ * This is a utility class for BarAPI. It is based on the code by SoThatsIt.
  * 
- * http://forums.bukkit.org/threads/tutorial-utilizing-the-boss-health-bar.158018/page-2#post-1760928
+ * http://forums.bukkit.org/threads/tutorial-utilizing-the-boss-health-bar
+ * .158018/page-2#post-1760928
  * 
  * @author James Mortemore
  */
 public class Util {
+	public static boolean newProtocol = false;
+	public static String version;
+	public static Class<?> fakeDragonClass = v1_6.class;
 
-	public static Integer ENTITY_ID = 6000;
+	static {
+		String name = Bukkit.getServer().getClass().getPackage().getName();
+		String mcVersion = name.substring(name.lastIndexOf('.') + 1);
+		String[] versions = mcVersion.split("_");
+
+		if (versions[0].equals("v1") && Integer.parseInt(versions[1]) > 6) {
+			newProtocol = true;
+			fakeDragonClass = v1_7.class;
+		}
+
+		version = mcVersion + ".";
+	}
+
+	public static FakeDragon newDragon(String message, Location loc) {
+		FakeDragon fakeDragon = null;
+
+		try {
+			fakeDragon = (FakeDragon) fakeDragonClass.getConstructor(String.class, Location.class).newInstance(message, loc);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return fakeDragon;
+	}
 
 	// Reflection Util
 	public static void sendPacket(Player p, Object packet) {
@@ -41,8 +75,6 @@ public class Util {
 	}
 
 	public static Class<?> getCraftClass(String ClassName) {
-		String name = Bukkit.getServer().getClass().getPackage().getName();
-		String version = name.substring(name.lastIndexOf('.') + 1) + ".";
 		String className = "net.minecraft.server." + version + ClassName;
 		Class<?> c = null;
 		try {
@@ -51,6 +83,21 @@ public class Util {
 			e.printStackTrace();
 		}
 		return c;
+	}
+
+	public static Object getHandle(World world) {
+		Object nms_entity = null;
+		Method entity_getHandle = getMethod(world.getClass(), "getHandle");
+		try {
+			nms_entity = entity_getHandle.invoke(world);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return nms_entity;
 	}
 
 	public static Object getHandle(Entity entity) {

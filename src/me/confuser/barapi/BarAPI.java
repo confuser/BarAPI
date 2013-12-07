@@ -1,6 +1,9 @@
 package me.confuser.barapi;
 
 import java.util.HashMap;
+
+import me.confuser.barapi.nms.FakeDragon;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -21,7 +24,6 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 
 public class BarAPI extends JavaPlugin implements Listener {
-	private static Integer ENTITY_ID = 6000;
 	private static HashMap<String, FakeDragon> players = new HashMap<String, FakeDragon>();
 	private static HashMap<String, Integer> timers = new HashMap<String, Integer>();
 
@@ -69,8 +71,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 				float health = oldDragon.health;
 				String message = oldDragon.name;
 
-				Object destroyPacket = getDragon(player, "").getDestroyEntityPacket();
-				Util.sendPacket(player, destroyPacket);
+				Util.sendPacket(player, getDragon(player, "").getDestroyPacket());
 
 				players.remove(player.getName());
 
@@ -148,8 +149,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 		if (!hasBar(player))
 			return;
 
-		Object destroyPacket = getDragon(player, "").getDestroyEntityPacket();
-		Util.sendPacket(player, destroyPacket);
+		Util.sendPacket(player, getDragon(player, "").getDestroyPacket());
 
 		players.remove(player.getName());
 
@@ -167,20 +167,18 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 		sendDragon(dragon, player);
 	}
-	
+
 	public static float getHealth(Player player) {
 		if (!hasBar(player))
 			return -1;
-		
-		
+
 		return getDragon(player, "").health;
 	}
-	
+
 	public static String getMessage(Player player) {
 		if (!hasBar(player))
 			return "";
-		
-		
+
 		return getDragon(player, "").name;
 	}
 
@@ -200,11 +198,8 @@ public class BarAPI extends JavaPlugin implements Listener {
 	}
 
 	private static void sendDragon(FakeDragon dragon, Player player) {
-		Object metaPacket = dragon.getMetadataPacket(dragon.getWatcher());
-		Object teleportPacket = dragon.getTeleportPacket(player.getLocation().add(0, -200, 0));
-
-		Util.sendPacket(player, metaPacket);
-		Util.sendPacket(player, teleportPacket);
+		Util.sendPacket(player, dragon.getMetaPacket(dragon.getWatcher()));
+		Util.sendPacket(player, dragon.getTeleportPacket(player.getLocation().add(0, -200, 0)));
 	}
 
 	private static FakeDragon getDragon(Player player, String message) {
@@ -215,10 +210,9 @@ public class BarAPI extends JavaPlugin implements Listener {
 	}
 
 	private static FakeDragon addDragon(Player player, String message) {
-		FakeDragon dragon = new FakeDragon(message, ENTITY_ID, player.getLocation().add(0, -200, 0));
+		FakeDragon dragon = Util.newDragon(message, player.getLocation().add(0, -200, 0));
 
-		Object mobPacket = dragon.getMobPacket();
-		Util.sendPacket(player, mobPacket);
+		Util.sendPacket(player, dragon.getSpawnPacket());
 
 		players.put(player.getName(), dragon);
 
@@ -226,10 +220,9 @@ public class BarAPI extends JavaPlugin implements Listener {
 	}
 
 	private static FakeDragon addDragon(Player player, Location loc, String message) {
-		FakeDragon dragon = new FakeDragon(message, ENTITY_ID, loc.add(0, -200, 0));
+		FakeDragon dragon = Util.newDragon(message, loc.add(0, -200, 0));
 
-		Object mobPacket = dragon.getMobPacket();
-		Util.sendPacket(player, mobPacket);
+		Util.sendPacket(player, dragon.getSpawnPacket());
 
 		players.put(player.getName(), dragon);
 
