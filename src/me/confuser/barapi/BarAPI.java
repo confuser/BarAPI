@@ -79,6 +79,10 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 			@Override
 			public void run() {
+				// Check if the player still has a dragon after the two ticks! ;)
+				if (!hasBar(player))
+					return;
+				
 				FakeDragon oldDragon = getDragon(player, "");
 
 				float health = oldDragon.health;
