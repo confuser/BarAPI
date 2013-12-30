@@ -1,3 +1,4 @@
 main: me.confuser.barapi.BarAPI
-name: BarAPI
-version: 2.0
+name: ${project.name}
+version: ${project.version}
+description: ${project.description}
