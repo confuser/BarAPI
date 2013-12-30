@@ -104,6 +104,23 @@ public class BarAPI extends JavaPlugin implements Listener {
 	private void quit(Player player) {
 		removeBar(player);
 	}
+	
+	/**
+	 * Set a message for all players.<br>
+	 * It will remain there until the player logs off or another plugin overrides it.<br>
+	 * This method will show a full health bar and will cancel any running timers.
+	 * 
+	 * @param message
+	 *            The message shown.<br>
+	 *            Due to limitations in Minecraft this message cannot be longer than 64 characters.<br>
+	 *            It will be cut to that size automatically.
+	 * @see BarAPI#setMessage(player, message)
+	 */
+	public static void setMessage(String message) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			setMessage(player, message);
+		}
+	}
 
 	/**
 	 * Set a message for the given player.<br>
@@ -127,6 +144,26 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 		sendDragon(dragon, player);
 
+	}
+	
+	/**
+	 * Set a message for all players.<br>
+	 * It will remain there for each player until the player logs off or another plugin overrides it.<br>
+	 * This method will show a health bar using the given percentage value and will cancel any running timers.
+	 * 
+	 * @param message
+	 *            The message shown to the player.<br>
+	 *            Due to limitations in Minecraft this message cannot be longer than 64 characters.<br>
+	 *            It will be cut to that size automatically.
+	 * @param percent
+	 *            The percentage of the health bar filled.<br>
+	 *            This value must be between 0F and 100F (inclusive).
+	 * @see BarAPI#setMessage(player, message, percent)
+	 */
+	public static void setMessage(String message, float percent) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			setMessage(player, message, percent);
+		}
 	}
 
 	/**
@@ -153,6 +190,28 @@ public class BarAPI extends JavaPlugin implements Listener {
 		cancelTimer(player);
 
 		sendDragon(dragon, player);
+	}
+	
+	/**
+	 * Set a message for all players.<br>
+	 * It will remain there for each player until the player logs off or another plugin overrides it.<br>
+	 * This method will use the health bar as a decreasing timer, all previously started timers will be cancelled.<br>
+	 * The timer starts with a full bar.<br>
+	 * The health bar will be removed automatically if it hits zero.
+	 * 
+	 * @param message
+	 *            The message shown.<br>
+	 *            Due to limitations in Minecraft this message cannot be longer than 64 characters.<br>
+	 *            It will be cut to that size automatically.
+	 * @param seconds
+	 *            The amount of seconds displayed by the timer.<br>
+	 *            Supports values from 1 (inclusive) to 200 (inclusive).
+	 * @see BarAPI#setMessage(player, message, seconds)
+	 */
+	public static void setMessage(String message, int seconds) {
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			setMessage(player, message, seconds);
+		}
 	}
 
 	/**
