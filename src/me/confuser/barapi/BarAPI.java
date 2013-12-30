@@ -105,6 +105,18 @@ public class BarAPI extends JavaPlugin implements Listener {
 		removeBar(player);
 	}
 
+	/**
+	 * Set a message for the given player.<br>
+	 * It will remain there until the player logs off or another plugin overrides it.<br>
+	 * This method will show a full health bar and will cancel any running timers.
+	 * 
+	 * @param player
+	 *            The player who should see the given message.
+	 * @param message
+	 *            The message shown to the player.<br>
+	 *            Due to limitations in Minecraft this message cannot be longer than 64 characters.<br>
+	 *            It will be cut to that size automatically.
+	 */
 	public static void setMessage(Player player, String message) {
 		FakeDragon dragon = getDragon(player, message);
 
@@ -117,6 +129,21 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 	}
 
+	/**
+	 * Set a message for the given player.<br>
+	 * It will remain there until the player logs off or another plugin overrides it.<br>
+	 * This method will show a health bar using the given percentage value and will cancel any running timers.
+	 * 
+	 * @param player
+	 *            The player who should see the given message.
+	 * @param message
+	 *            The message shown to the player.<br>
+	 *            Due to limitations in Minecraft this message cannot be longer than 64 characters.<br>
+	 *            It will be cut to that size automatically.
+	 * @param percent
+	 *            The percentage of the health bar filled.<br>
+	 *            This value must be between 0F and 100F (inclusive).
+	 */
 	public static void setMessage(Player player, String message, float percent) {
 		FakeDragon dragon = getDragon(player, message);
 
@@ -128,6 +155,23 @@ public class BarAPI extends JavaPlugin implements Listener {
 		sendDragon(dragon, player);
 	}
 
+	/**
+	 * Set a message for the given player.<br>
+	 * It will remain there until the player logs off or another plugin overrides it.<br>
+	 * This method will use the health bar as a decreasing timer, all previously started timers will be cancelled.<br>
+	 * The timer starts with a full bar.<br>
+	 * The health bar will be removed automatically if it hits zero.
+	 * 
+	 * @param player
+	 *            The player who should see the given timer/message.
+	 * @param message
+	 *            The message shown to the player.<br>
+	 *            Due to limitations in Minecraft this message cannot be longer than 64 characters.<br>
+	 *            It will be cut to that size automatically.
+	 * @param seconds
+	 *            The amount of seconds displayed by the timer.<br>
+	 *            Supports values from 1 (inclusive) to 200 (inclusive).
+	 */
 	public static void setMessage(final Player player, String message, int seconds) {
 		FakeDragon dragon = getDragon(player, message);
 
@@ -158,10 +202,24 @@ public class BarAPI extends JavaPlugin implements Listener {
 		sendDragon(dragon, player);
 	}
 
+	/**
+	 * Checks whether the given player has a bar.
+	 * 
+	 * @param player
+	 *            The player who should be checked.
+	 * @return True, if the player has a bar, False otherwise.
+	 */
 	public static boolean hasBar(Player player) {
 		return players.get(player.getName()) != null;
 	}
 
+	/**
+	 * Removes the bar from the given player.<br>
+	 * If the player has no bar, this method does nothing.
+	 * 
+	 * @param player
+	 *            The player whose bar should be removed.
+	 */
 	public static void removeBar(Player player) {
 		if (!hasBar(player))
 			return;
@@ -173,6 +231,16 @@ public class BarAPI extends JavaPlugin implements Listener {
 		cancelTimer(player);
 	}
 
+	/**
+	 * Modifies the health of an existing bar.<br>
+	 * If the player has no bar, this method does nothing.
+	 * 
+	 * @param player
+	 *            The player whose bar should be modified.
+	 * @param percent
+	 *            The percentage of the health bar filled.<br>
+	 *            This value must be between 0F and 100F (inclusive).
+	 */
 	public static void setHealth(Player player, float percent) {
 		if (!hasBar(player))
 			return;
@@ -185,6 +253,14 @@ public class BarAPI extends JavaPlugin implements Listener {
 		sendDragon(dragon, player);
 	}
 
+	/**
+	 * Get the health of an existing bar.
+	 * 
+	 * @param player
+	 *            The player whose bar's health should be returned.
+	 * @return The current absolute health of the bar.<br>
+	 *         If the player has no bar, this method returns -1.
+	 */
 	public static float getHealth(Player player) {
 		if (!hasBar(player))
 			return -1;
@@ -192,6 +268,14 @@ public class BarAPI extends JavaPlugin implements Listener {
 		return getDragon(player, "").health;
 	}
 
+	/**
+	 * Get the message of an existing bar.
+	 * 
+	 * @param player
+	 *            The player whose bar's message should be returned.
+	 * @return The current message displayed to the player.<br>
+	 *         If the player has no bar, this method returns an empty string.
+	 */
 	public static String getMessage(Player player) {
 		if (!hasBar(player))
 			return "";
