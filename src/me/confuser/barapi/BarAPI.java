@@ -228,9 +228,13 @@ public class BarAPI extends JavaPlugin implements Listener {
 	 *            It will be cut to that size automatically.
 	 * @param seconds
 	 *            The amount of seconds displayed by the timer.<br>
-	 *            Supports values from 1 (inclusive) to 200 (inclusive).
+	 *            Supports values from 1 (inclusive) to {@link FakeDragon#MAX_HEALTH} (inclusive).
+	 * @throws IllegalArgumentException
+	 *             If seconds is not within valid bounds.
 	 */
 	public static void setMessage(final Player player, String message, int seconds) {
+		Validate.isTrue(seconds >= 0 && seconds <= FakeDragon.MAX_HEALTH, "Seconds must be between 1 and " + FakeDragon.MAX_HEALTH + " but was: ", seconds);
+		
 		FakeDragon dragon = getDragon(player, message);
 
 		dragon.name = cleanMessage(message);
