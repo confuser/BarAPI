@@ -157,7 +157,9 @@ public class BarAPI extends JavaPlugin implements Listener {
 	 *            It will be cut to that size automatically.
 	 * @param percent
 	 *            The percentage of the health bar filled.<br>
-	 *            This value must be between 0F and 100F (inclusive).
+	 *            This value must be between 0F (inclusive) and 100F (inclusive).
+	 * @throws IllegalArgumentException
+	 *             If the percentage is not within valid bounds.
 	 * @see BarAPI#setMessage(player, message, percent)
 	 */
 	public static void setMessage(String message, float percent) {
@@ -179,9 +181,13 @@ public class BarAPI extends JavaPlugin implements Listener {
 	 *            It will be cut to that size automatically.
 	 * @param percent
 	 *            The percentage of the health bar filled.<br>
-	 *            This value must be between 0F and 100F (inclusive).
+	 *            This value must be between 0F (inclusive) and 100F (inclusive).
+	 * @throws IllegalArgumentException
+	 *             If the percentage is not within valid bounds.
 	 */
 	public static void setMessage(Player player, String message, float percent) {
+		Validate.isTrue(0F <= percent && percent <= 100F, "Percent must be between 0F and 100F, but was: ", percent);
+		
 		FakeDragon dragon = getDragon(player, message);
 
 		dragon.name = cleanMessage(message);
