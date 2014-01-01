@@ -5,7 +5,7 @@ import me.confuser.barapi.Util;
 import org.bukkit.Location;
 
 public abstract class FakeDragon {
-	public static final int MAX_HEALTH = 200;
+	public static final float MAX_HEALTH = 200;
 	private int x;
 	private int y;
 	private int z;
@@ -37,7 +37,7 @@ public abstract class FakeDragon {
 		this.world = Util.getHandle(loc.getWorld());
 	}
 
-	public int getMaxHealth() {
+	public float getMaxHealth() {
 		return MAX_HEALTH;
 	}
 
