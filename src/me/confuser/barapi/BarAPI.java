@@ -1,5 +1,6 @@
 package me.confuser.barapi;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import me.confuser.barapi.nms.FakeDragon;
@@ -7,6 +8,7 @@ import net.gravitydevelopment.updater.Updater;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,6 +20,7 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.mcstats.MetricsLite;
 
 /**
  * Allows plugins to safely set a health bar message.
@@ -38,23 +41,32 @@ public class BarAPI extends JavaPlugin implements Listener {
 		if (getConfig().getBoolean("autoUpdate"))
 			new Updater(this, 64876, getFile(), Updater.UpdateType.DEFAULT, false);
 		
+		try {
+		    MetricsLite metrics = new MetricsLite(this);
+		    metrics.start();
+		} catch (IOException e) {
+		    // Failed to submit the stats :-(
+		}
+		
 		getServer().getPluginManager().registerEvents(this, this);
 
 		getLogger().info("Loaded");
 
 		plugin = this;
 
-		// Test
-		/*plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
-
-			@Override
-			public void run() {
-				for (Player player : plugin.getServer().getOnlinePlayers()) {
-					BarAPI.setMessage(player, ChatColor.AQUA + "Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI", 10);
+		// TestMode
+		if (getConfig().getBoolean("testMode")) {
+			plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+	
+				@Override
+				public void run() {
+					for (Player player : plugin.getServer().getOnlinePlayers()) {
+						BarAPI.setMessage(player, ChatColor.AQUA + "Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI Testing BarAPI", 10);
+					}
 				}
-			}
-
-		}, 30L, 300L);*/
+	
+			}, 30L, 300L);
+		}
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
