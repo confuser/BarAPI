@@ -5,7 +5,7 @@
 	<description>Allows plugins to control the boss health bar message</description>
 	<groupId>me.confuser</groupId>
 	<artifactId>BarAPI</artifactId>
-	<version>2.0</version>
+	<version>3.0</version>
 	<build>
 		<finalName>BarAPI</finalName>
 		<resources>
