@@ -3,6 +3,7 @@ package me.confuser.barapi;
 import java.util.HashMap;
 
 import me.confuser.barapi.nms.FakeDragon;
+import net.gravitydevelopment.updater.Updater;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -31,14 +32,20 @@ public class BarAPI extends JavaPlugin implements Listener {
 	private static BarAPI plugin;
 
 	public void onEnable() {
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+		
+		if (getConfig().getBoolean("autoUpdate"))
+			new Updater(this, 64876, getFile(), Updater.UpdateType.DEFAULT, false);
+		
 		getServer().getPluginManager().registerEvents(this, this);
 
 		getLogger().info("Loaded");
 
 		plugin = this;
 
-		/* Test
-		plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+		// Test
+		/*plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
 
 			@Override
 			public void run() {
