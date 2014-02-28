@@ -68,6 +68,20 @@ public class BarAPI extends JavaPlugin implements Listener {
 			}, 30L, 300L);
 		}
 	}
+	
+	public void onDisable() {
+		for (Player player : plugin.getServer().getOnlinePlayers()) {
+			quit(player);
+		}
+
+		players.clear();
+		
+		for (int timerID : timers.values()) {
+			Bukkit.getScheduler().cancelTask(timerID);
+		}
+		
+		timers.clear();
+	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void PlayerLoggout(PlayerQuitEvent event) {
