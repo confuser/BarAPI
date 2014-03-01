@@ -275,7 +275,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 	 *             If seconds is zero or below.
 	 */
 	public static void setMessage(final Player player, String message, int seconds) {
-		Validate.isTrue(seconds >= 0, "Seconds must be above 1 but was: ", seconds);
+		Validate.isTrue(seconds > 0, "Seconds must be above 1 but was: ", seconds);
 		
 		FakeDragon dragon = getDragon(player, message);
 
