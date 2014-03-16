@@ -293,7 +293,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 				FakeDragon drag = getDragon(player, "");
 				drag.health -= dragonHealthMinus;
 
-				if (drag.health <= 0) {
+				if (drag.health <= 1) {
 					removeBar(player);
 					cancelTimer(player);
 				} else {
@@ -353,8 +353,12 @@ public class BarAPI extends JavaPlugin implements Listener {
 		dragon.health = (percent / 100f) * FakeDragon.MAX_HEALTH;
 
 		cancelTimer(player);
-
-		sendDragon(dragon, player);
+		
+		if (percent == 0) {
+			removeBar(player);
+		} else {
+			sendDragon(dragon, player);
+		}
 	}
 
 	/**
