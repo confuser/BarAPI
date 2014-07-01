@@ -49,10 +49,10 @@ public class v1_7 extends FakeDragon {
 			Field motX = Util.getField(Entity, "motX");
 			motX.set(dragon, getXvel());
 
-			Field motY = Util.getField(Entity, "motX");
+			Field motY = Util.getField(Entity, "motY");
 			motY.set(dragon, getYvel());
 
-			Field motZ = Util.getField(Entity, "motX");
+			Field motZ = Util.getField(Entity, "motZ");
 			motZ.set(dragon, getZvel());
 
 			Method getId = Util.getMethod(EntityEnderDragon, "getId", new Class<?>[] {});
