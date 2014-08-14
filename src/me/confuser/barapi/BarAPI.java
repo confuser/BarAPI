@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.mcstats.MetricsLite;
 
 import java.io.IOException;
@@ -285,7 +284,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 		cancelTimer(player);
 
-		timers.put(player.getUniqueId(), Bukkit.getScheduler().runTaskTimer(plugin, new BukkitRunnable() {
+		timers.put(player.getUniqueId(), Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
 
 			@Override
 			public void run() {
