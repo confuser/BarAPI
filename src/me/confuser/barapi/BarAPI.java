@@ -6,6 +6,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,6 +33,8 @@ public class BarAPI extends JavaPlugin implements Listener {
 	private static HashMap<UUID, Integer> timers = new HashMap<UUID, Integer>();
 
 	private static BarAPI plugin;
+	
+	private static boolean useSpigotHack = false;
 
 	public void onEnable() {
 		getConfig().options().copyDefaults(true);
@@ -65,6 +68,19 @@ public class BarAPI extends JavaPlugin implements Listener {
 				}
 	
 			}, 30L, 300L);
+		}
+		
+		useSpigotHack = getConfig().getBoolean("useSpigotHack", false);
+		
+		if (useSpigotHack) {
+			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+				public void run() {
+					for (UUID uuid : players.keySet()) {
+						Player p = Bukkit.getPlayer(uuid);
+						Util.sendPacket(p, players.get(uuid).getTeleportPacket(getDragonLocation(p.getLocation())));
+					}
+				}
+			}, 0L, 5L);
 		}
 	}
 	
@@ -137,6 +153,10 @@ public class BarAPI extends JavaPlugin implements Listener {
 		removeBar(player);
 	}
 	
+	public static boolean useSpigotHack() {
+		return useSpigotHack;
+	}
+	
 	/**
 	 * Set a message for all players.<br>
 	 * It will remain there until the player logs off or another plugin overrides it.<br>
@@ -170,7 +190,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 		FakeDragon dragon = getDragon(player, message);
 
 		dragon.name = cleanMessage(message);
-		dragon.health = FakeDragon.MAX_HEALTH;
+		dragon.health = dragon.getMaxHealth();
 
 		cancelTimer(player);
 
@@ -222,7 +242,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 		FakeDragon dragon = getDragon(player, message);
 
 		dragon.name = cleanMessage(message);
-		dragon.health = (percent / 100f) * FakeDragon.MAX_HEALTH;
+		dragon.health = (percent / 100f) * dragon.getMaxHealth();
 
 		cancelTimer(player);
 
@@ -278,9 +298,9 @@ public class BarAPI extends JavaPlugin implements Listener {
 		FakeDragon dragon = getDragon(player, message);
 
 		dragon.name = cleanMessage(message);
-		dragon.health = FakeDragon.MAX_HEALTH;
+		dragon.health = dragon.getMaxHealth();
 
-		final float dragonHealthMinus = FakeDragon.MAX_HEALTH / seconds;
+		final float dragonHealthMinus = dragon.getMaxHealth() / seconds;
 
 		cancelTimer(player);
 
@@ -348,7 +368,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 			return;
 
 		FakeDragon dragon = getDragon(player, "");
-		dragon.health = (percent / 100f) * FakeDragon.MAX_HEALTH;
+		dragon.health = (percent / 100f) * dragon.getMaxHealth();
 
 		cancelTimer(player);
 		
@@ -406,7 +426,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 	private static void sendDragon(FakeDragon dragon, Player player) {
 		Util.sendPacket(player, dragon.getMetaPacket(dragon.getWatcher()));
-		Util.sendPacket(player, dragon.getTeleportPacket(player.getLocation().add(0, -300, 0)));
+		Util.sendPacket(player, dragon.getTeleportPacket(getDragonLocation(player.getLocation())));
 	}
 
 	private static FakeDragon getDragon(Player player, String message) {
@@ -417,7 +437,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 	}
 
 	private static FakeDragon addDragon(Player player, String message) {
-		FakeDragon dragon = Util.newDragon(message, player.getLocation().add(0, -300, 0));
+		FakeDragon dragon = Util.newDragon(message, getDragonLocation(player.getLocation()));
 
 		Util.sendPacket(player, dragon.getSpawnPacket());
 
@@ -427,12 +447,44 @@ public class BarAPI extends JavaPlugin implements Listener {
 	}
 
 	private static FakeDragon addDragon(Player player, Location loc, String message) {
-		FakeDragon dragon = Util.newDragon(message, loc.add(0, -300, 0));
+		FakeDragon dragon = Util.newDragon(message, getDragonLocation(loc));
 
 		Util.sendPacket(player, dragon.getSpawnPacket());
 
 		players.put(player.getUniqueId(), dragon);
 
 		return dragon;
+	}
+	
+	private static Location getDragonLocation(Location loc) {
+		if (!useSpigotHack()) {
+			loc.subtract(0, 300, 0);
+			return loc;
+		}
+
+		float pitch = loc.getPitch();
+		
+		if (pitch >= 55) {
+			loc.add(0, -300, 0);
+		} else if (pitch <= -55) {
+			loc.add(0, 300, 0);
+		} else {
+			loc = loc.getBlock().getRelative(getDirection(loc), plugin.getServer().getViewDistance() * 16).getLocation();
+		}
+
+		return loc;
+	}
+
+	private static BlockFace getDirection(Location loc) {
+		float dir = Math.round(loc.getYaw() / 90);
+		if (dir == -4 || dir == 0 || dir == 4)
+			return BlockFace.SOUTH;
+		if (dir == -1 || dir == 3)
+			return BlockFace.EAST;
+		if (dir == -2 || dir == 2)
+			return BlockFace.NORTH;
+		if (dir == -3 || dir == 1)
+			return BlockFace.WEST;
+		return null;
 	}
 }

@@ -5,7 +5,7 @@ import me.confuser.barapi.Util;
 import org.bukkit.Location;
 
 public abstract class FakeDragon {
-	public static final float MAX_HEALTH = 200;
+	private float maxHealth = 200;
 	private int x;
 	private int y;
 	private int z;
@@ -25,7 +25,7 @@ public abstract class FakeDragon {
 		this.x = loc.getBlockX();
 		this.y = loc.getBlockY();
 		this.z = loc.getBlockZ();
-		this.health = percent / 100F * MAX_HEALTH;
+		this.health = percent / 100F * maxHealth;
 		this.world = Util.getHandle(loc.getWorld());
 	}
 
@@ -38,11 +38,11 @@ public abstract class FakeDragon {
 	}
 
 	public float getMaxHealth() {
-		return MAX_HEALTH;
+		return maxHealth;
 	}
 
 	public void setHealth(int percent) {
-		this.health = percent / 100F * MAX_HEALTH;
+		this.health = percent / 100F * maxHealth;
 	}
 
 	public void setName(String name) {
@@ -127,6 +127,10 @@ public abstract class FakeDragon {
 
 	public void setWorld(Object world) {
 		this.world = world;
+	}
+	
+	public void setMaxHealth(float max) {
+		maxHealth = max;
 	}
 
 	public abstract Object getSpawnPacket();

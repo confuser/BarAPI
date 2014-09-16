@@ -4,9 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import me.confuser.barapi.nms.FakeDragon;
-import me.confuser.barapi.nms.v1_6;
-import me.confuser.barapi.nms.v1_7;
+import me.confuser.barapi.nms.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -28,16 +26,21 @@ public class Util {
 	public static Class<?> fakeDragonClass = v1_6.class;
 
 	static {
-		String name = Bukkit.getServer().getClass().getPackage().getName();
-		String mcVersion = name.substring(name.lastIndexOf('.') + 1);
-		String[] versions = mcVersion.split("_");
+		if (BarAPI.useSpigotHack()) {
+			fakeDragonClass = v1_8Fake.class;
+			version = "v1_7_R4.";
+		} else {
+			String name = Bukkit.getServer().getClass().getPackage().getName();
+			String mcVersion = name.substring(name.lastIndexOf('.') + 1);
+			String[] versions = mcVersion.split("_");
 
-		if (versions[0].equals("v1") && Integer.parseInt(versions[1]) > 6) {
-			newProtocol = true;
-			fakeDragonClass = v1_7.class;
+			if (versions[0].equals("v1") && Integer.parseInt(versions[1]) > 6) {
+				newProtocol = true;
+				fakeDragonClass = v1_7.class;
+			}
+
+			version = mcVersion + ".";
 		}
-
-		version = mcVersion + ".";
 	}
 
 	public static FakeDragon newDragon(String message, Location loc) {
