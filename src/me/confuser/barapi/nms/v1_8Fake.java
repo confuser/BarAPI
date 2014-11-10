@@ -185,4 +185,20 @@ public class v1_8Fake extends FakeDragon {
 
 		return watcher;
 	}
+	
+	public static boolean isUsable() {
+		Class<?> PacketPlayOutEntityTeleport = Util.getCraftClass("PacketPlayOutEntityTeleport");
+
+		try {
+			PacketPlayOutEntityTeleport.getConstructor(new Class<?>[] { int.class, int.class, int.class, int.class, byte.class, byte.class, boolean.class, boolean.class });
+		} catch (IllegalArgumentException e) {
+			return false;
+		} catch (SecurityException e) {
+			return false;
+		} catch (NoSuchMethodException e) {
+			return false;
+		}
+
+		return true;
+	}
 }

@@ -26,6 +26,10 @@ public class Util {
 	public static Class<?> fakeDragonClass = v1_6.class;
 
 	static {
+		detectVersion();
+	}
+	
+	public static void detectVersion() {
 		if (BarAPI.useSpigotHack()) {
 			fakeDragonClass = v1_8Fake.class;
 			version = "v1_7_R4.";

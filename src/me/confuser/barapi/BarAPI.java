@@ -1,6 +1,7 @@
 package me.confuser.barapi;
 
 import me.confuser.barapi.nms.FakeDragon;
+import me.confuser.barapi.nms.v1_8Fake;
 import net.gravitydevelopment.updater.Updater;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -40,22 +41,44 @@ public class BarAPI extends JavaPlugin implements Listener {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		
-		if (getConfig().getBoolean("autoUpdate"))
+		if (getConfig().getBoolean("autoUpdate")) {
 			new Updater(this, 64876, getFile(), Updater.UpdateType.DEFAULT, false);
-		
+		}
+
 		try {
 		    MetricsLite metrics = new MetricsLite(this);
 		    metrics.start();
 		} catch (IOException e) {
 		    // Failed to submit the stats :-(
 		}
+
+		plugin = this;
+		
+		useSpigotHack = getConfig().getBoolean("useSpigotHack", false);
+		
+		if (!useSpigotHack) {
+			if (v1_8Fake.isUsable()) {
+				useSpigotHack = true;
+				Util.detectVersion();
+				getLogger().info("Detected spigot hack, enabling fake 1.8");
+			}
+		}
 		
 		getServer().getPluginManager().registerEvents(this, this);
 
 		getLogger().info("Loaded");
-
-		plugin = this;
-
+		
+		if (useSpigotHack) {
+			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+				public void run() {
+					for (UUID uuid : players.keySet()) {
+						Player p = Bukkit.getPlayer(uuid);
+						Util.sendPacket(p, players.get(uuid).getTeleportPacket(getDragonLocation(p.getLocation())));
+					}
+				}
+			}, 0L, 5L);
+		}
+		
 		// TestMode
 		if (getConfig().getBoolean("testMode")) {
 			plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
@@ -68,19 +91,6 @@ public class BarAPI extends JavaPlugin implements Listener {
 				}
 	
 			}, 30L, 300L);
-		}
-		
-		useSpigotHack = getConfig().getBoolean("useSpigotHack", false);
-		
-		if (useSpigotHack) {
-			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-				public void run() {
-					for (UUID uuid : players.keySet()) {
-						Player p = Bukkit.getPlayer(uuid);
-						Util.sendPacket(p, players.get(uuid).getTeleportPacket(getDragonLocation(p.getLocation())));
-					}
-				}
-			}, 0L, 5L);
 		}
 	}
 	
