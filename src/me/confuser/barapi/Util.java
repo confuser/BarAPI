@@ -24,6 +24,7 @@ public class Util {
 	public static boolean newProtocol = false;
 	public static String version;
 	public static Class<?> fakeDragonClass = v1_6.class;
+	public static boolean isBelowGround = true;
 
 	static {
 		detectVersion();
@@ -33,14 +34,22 @@ public class Util {
 		if (BarAPI.useSpigotHack()) {
 			fakeDragonClass = v1_8Fake.class;
 			version = "v1_7_R4.";
+			isBelowGround = false;
 		} else {
 			String name = Bukkit.getServer().getClass().getPackage().getName();
 			String mcVersion = name.substring(name.lastIndexOf('.') + 1);
 			String[] versions = mcVersion.split("_");
 
-			if (versions[0].equals("v1") && Integer.parseInt(versions[1]) > 6) {
-				newProtocol = true;
-				fakeDragonClass = v1_7.class;
+			if (versions[0].equals("v1")) {
+				int minor = Integer.parseInt(versions[1]);
+
+				if (minor == 7) {
+					newProtocol = true;
+					fakeDragonClass = v1_7.class;
+				} else if (minor == 8) {
+					fakeDragonClass = v1_8.class;
+					isBelowGround = false;
+				}
 			}
 
 			version = mcVersion + ".";
