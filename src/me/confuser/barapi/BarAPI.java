@@ -68,7 +68,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 		getLogger().info("Loaded");
 		
-		if (useSpigotHack) {
+		if (Util.isCloseLocation) {
 			getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 				public void run() {
 					for (UUID uuid : players.keySet()) {
@@ -445,7 +445,7 @@ public class BarAPI extends JavaPlugin implements Listener {
 		} else
 			return addDragon(player, cleanMessage(message));
 	}
-
+	
 	private static FakeDragon addDragon(Player player, String message) {
 		FakeDragon dragon = Util.newDragon(message, getDragonLocation(player.getLocation()));
 
@@ -471,6 +471,10 @@ public class BarAPI extends JavaPlugin implements Listener {
 			loc.subtract(0, 300, 0);
 			return loc;
 		}
+		
+		if (Util.isCloseLocation) {
+			return loc.getBlock().getRelative(getDirection(loc), 16).getLocation();
+		}
 
 		float pitch = loc.getPitch();
 		
@@ -487,6 +491,14 @@ public class BarAPI extends JavaPlugin implements Listener {
 
 	private static BlockFace getDirection(Location loc) {
 		float dir = Math.round(loc.getYaw() / 90);
+		float pitch = loc.getPitch();
+		
+		if (pitch <= -49.8) {
+			return BlockFace.UP;
+		} else if (pitch >= 50) {
+			return BlockFace.DOWN;
+		}
+		
 		if (dir == -4 || dir == 0 || dir == 4)
 			return BlockFace.SOUTH;
 		if (dir == -1 || dir == 3)

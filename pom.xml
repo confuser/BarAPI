@@ -59,7 +59,7 @@
 	<repositories>
 		<repository>
 			<id>bukkit-repo</id>
-			<url>http://repo.bukkit.org/content/groups/public</url>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public</url>
 		</repository>
 		<repository>
 			<id>gravity-repo</id>
@@ -74,13 +74,13 @@
 		<dependency> <!-- Bukkit implementation -->
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.7.10-R0.1-SNAPSHOT</version>
+			<version>1.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency> <!-- NMS blocks -->
 			<groupId>org.bukkit</groupId>
 			<artifactId>craftbukkit</artifactId>
-			<version>1.7.10-R0.1-SNAPSHOT</version>
+			<version>1.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

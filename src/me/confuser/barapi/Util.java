@@ -25,6 +25,7 @@ public class Util {
 	public static String version;
 	public static Class<?> fakeDragonClass = v1_6.class;
 	public static boolean isBelowGround = true;
+	public static boolean isCloseLocation = false;
 
 	static {
 		detectVersion();
@@ -49,6 +50,7 @@ public class Util {
 				} else if (minor == 8) {
 					fakeDragonClass = v1_8.class;
 					isBelowGround = false;
+					isCloseLocation = true;
 				}
 			}
 
