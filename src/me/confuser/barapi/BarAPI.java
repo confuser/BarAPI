@@ -197,6 +197,8 @@ public class BarAPI extends JavaPlugin implements Listener {
 	 *            It will be cut to that size automatically.
 	 */
 	public static void setMessage(Player player, String message) {
+		if (hasBar(player))
+			removeBar(player);
 		FakeDragon dragon = getDragon(player, message);
 
 		dragon.name = cleanMessage(message);
@@ -248,6 +250,9 @@ public class BarAPI extends JavaPlugin implements Listener {
 	 */
 	public static void setMessage(Player player, String message, float percent) {
 		Validate.isTrue(0F <= percent && percent <= 100F, "Percent must be between 0F and 100F, but was: ", percent);
+		
+		if (hasBar(player))
+			removeBar(player);
 		
 		FakeDragon dragon = getDragon(player, message);
 
@@ -304,6 +309,9 @@ public class BarAPI extends JavaPlugin implements Listener {
 	 */
 	public static void setMessage(final Player player, String message, int seconds) {
 		Validate.isTrue(seconds > 0, "Seconds must be above 1 but was: ", seconds);
+		
+		if (hasBar(player))
+			removeBar(player);
 		
 		FakeDragon dragon = getDragon(player, message);
 
