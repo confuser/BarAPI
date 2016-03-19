@@ -1,7 +1,7 @@
 package me.confuser.barapi;
 
 import me.confuser.barapi.nms.FakeDragon;
-import me.confuser.barapi.nms.v1_8fake;
+import me.confuser.barapi.nms.v1_8Fake;
 import me.confuser.barapi.nms.v1_9;
 import net.gravitydevelopment.updater.Updater;
 import org.apache.commons.lang.Validate;
@@ -424,7 +424,7 @@ public class BarAPI extends JavaPlugin implements Listener {
     useSpigotHack = getConfig().getBoolean("useSpigotHack", false);
 
     if (!useSpigotHack) {
-      if (v1_8fake.isUsable()) {
+      if (v1_8Fake.isUsable()) {
         useSpigotHack = true;
         Util.detectVersion();
         getLogger().info("Detected spigot hack, enabling fake 1.8");
