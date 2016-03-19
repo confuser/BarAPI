@@ -55,6 +55,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    *
    * @see BarAPI#setMessage(player, message)
    */
+  @Deprecated
   public static void setMessage(String message) {
     for (Player player : Bukkit.getOnlinePlayers()) {
       setMessage(player, message);
@@ -71,6 +72,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    *                Due to limitations in Minecraft this message cannot be longer than 64 characters.<br>
    *                It will be cut to that size automatically.
    */
+  @Deprecated
   public static void setMessage(Player player, String message) {
     if (hasBar(player))
       removeBar(player);
@@ -98,6 +100,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    * @throws IllegalArgumentException If the percentage is not within valid bounds.
    * @see BarAPI#setMessage(player, message, percent)
    */
+  @Deprecated
   public static void setMessage(String message, float percent) {
     for (Player player : Bukkit.getOnlinePlayers()) {
       setMessage(player, message, percent);
@@ -118,6 +121,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    *
    * @throws IllegalArgumentException If the percentage is not within valid bounds.
    */
+  @Deprecated
   public static void setMessage(Player player, String message, float percent) {
     Validate.isTrue(0F <= percent && percent <= 100F, "Percent must be between 0F and 100F, but was: ", percent);
 
@@ -150,6 +154,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    * @throws IllegalArgumentException If seconds is zero or below.
    * @see BarAPI#setMessage(player, message, seconds)
    */
+  @Deprecated
   public static void setMessage(String message, int seconds) {
     for (Player player : Bukkit.getOnlinePlayers()) {
       setMessage(player, message, seconds);
@@ -172,6 +177,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    *
    * @throws IllegalArgumentException If seconds is zero or below.
    */
+  @Deprecated
   public static void setMessage(final Player player, String message, int seconds) {
     Validate.isTrue(seconds > 0, "Seconds must be above 1 but was: ", seconds);
 
@@ -214,6 +220,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    *
    * @return True, if the player has a bar, False otherwise.
    */
+  @Deprecated
   public static boolean hasBar(Player player) {
     return players.get(player.getUniqueId()) != null;
   }
@@ -224,6 +231,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    *
    * @param player The player whose bar should be removed.
    */
+  @Deprecated
   public static void removeBar(Player player) {
     if (!hasBar(player))
       return;
@@ -249,6 +257,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    * @param percent The percentage of the health bar filled.<br>
    *                This value must be between 0F and 100F (inclusive).
    */
+  @Deprecated
   public static void setHealth(Player player, float percent) {
     if (!hasBar(player))
       return;
@@ -273,6 +282,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    * @return The current absolute health of the bar.<br>
    * If the player has no bar, this method returns -1.
    */
+  @Deprecated
   public static float getHealth(Player player) {
     if (!hasBar(player))
       return -1;
@@ -288,6 +298,7 @@ public class BarAPI extends JavaPlugin implements Listener {
    * @return The current message displayed to the player.<br>
    * If the player has no bar, this method returns an empty string.
    */
+  @Deprecated
   public static String getMessage(Player player) {
     if (!hasBar(player))
       return "";
