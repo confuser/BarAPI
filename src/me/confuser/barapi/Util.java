@@ -32,7 +32,7 @@ public class Util {
 	
 	public static void detectVersion() {
 		if (BarAPI.useSpigotHack()) {
-			fakeDragonClass = v1_8Fake.class;
+			fakeDragonClass = v1_8fake.class;
 			version = "v1_7_R4.";
 			isBelowGround = false;
 		} else {
@@ -49,7 +49,9 @@ public class Util {
 				} else if (minor == 8) {
 					fakeDragonClass = v1_8.class;
 					isBelowGround = false;
-				}
+				} else if (minor == 9) {
+          fakeDragonClass = v1_9.class;
+        }
 			}
 
 			version = mcVersion + ".";

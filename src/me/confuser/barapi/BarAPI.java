@@ -1,13 +1,15 @@
 package me.confuser.barapi;
 
 import me.confuser.barapi.nms.FakeDragon;
-import me.confuser.barapi.nms.v1_8Fake;
+import me.confuser.barapi.nms.v1_8fake;
+import me.confuser.barapi.nms.v1_9;
 import net.gravitydevelopment.updater.Updater;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -226,7 +228,13 @@ public class BarAPI extends JavaPlugin implements Listener {
     if (!hasBar(player))
       return;
 
-    Util.sendPacket(player, getDragon(player, "").getDestroyPacket());
+    FakeDragon dragon = getDragon(player, "");
+
+    if (dragon instanceof v1_9) {
+      ((v1_9) dragon).getBar().removePlayer(player);
+    } else {
+      Util.sendPacket(player, getDragon(player, "").getDestroyPacket());
+    }
 
     players.remove(player.getUniqueId());
 
@@ -303,8 +311,15 @@ public class BarAPI extends JavaPlugin implements Listener {
   }
 
   private static void sendDragon(FakeDragon dragon, Player player) {
-    Util.sendPacket(player, dragon.getMetaPacket(dragon.getWatcher()));
-    Util.sendPacket(player, dragon.getTeleportPacket(getDragonLocation(player.getLocation())));
+    if (dragon instanceof v1_9) {
+      BossBar bar = ((v1_9) dragon).getBar();
+
+      bar.addPlayer(player);
+      bar.setProgress(dragon.health / dragon.getMaxHealth());
+    } else {
+      Util.sendPacket(player, dragon.getMetaPacket(dragon.getWatcher()));
+      Util.sendPacket(player, dragon.getTeleportPacket(getDragonLocation(player.getLocation())));
+    }
   }
 
   private static FakeDragon getDragon(Player player, String message) {
@@ -317,7 +332,13 @@ public class BarAPI extends JavaPlugin implements Listener {
   private static FakeDragon addDragon(Player player, String message) {
     FakeDragon dragon = Util.newDragon(message, getDragonLocation(player.getLocation()));
 
-    Util.sendPacket(player, dragon.getSpawnPacket());
+    if (dragon instanceof v1_9) {
+      BossBar bar = ((v1_9) dragon).getBar();
+
+      bar.addPlayer(player);
+    } else {
+      Util.sendPacket(player, dragon.getSpawnPacket());
+    }
 
     players.put(player.getUniqueId(), dragon);
 
@@ -327,7 +348,13 @@ public class BarAPI extends JavaPlugin implements Listener {
   private static FakeDragon addDragon(Player player, Location loc, String message) {
     FakeDragon dragon = Util.newDragon(message, getDragonLocation(loc));
 
-    Util.sendPacket(player, dragon.getSpawnPacket());
+    if (dragon instanceof v1_9) {
+      BossBar bar = ((v1_9) dragon).getBar();
+
+      bar.addPlayer(player);
+    } else {
+      Util.sendPacket(player, dragon.getSpawnPacket());
+    }
 
     players.put(player.getUniqueId(), dragon);
 
@@ -386,7 +413,7 @@ public class BarAPI extends JavaPlugin implements Listener {
     useSpigotHack = getConfig().getBoolean("useSpigotHack", false);
 
     if (!useSpigotHack) {
-      if (v1_8Fake.isUsable()) {
+      if (v1_8fake.isUsable()) {
         useSpigotHack = true;
         Util.detectVersion();
         getLogger().info("Detected spigot hack, enabling fake 1.8");
@@ -463,6 +490,10 @@ public class BarAPI extends JavaPlugin implements Listener {
     if (!hasBar(player))
       return;
 
+    final FakeDragon oldDragon = getDragon(player, "");
+
+    if (oldDragon instanceof v1_9) return;
+
     Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 
       @Override
@@ -470,8 +501,6 @@ public class BarAPI extends JavaPlugin implements Listener {
         // Check if the player still has a dragon after the two ticks! ;)
         if (!hasBar(player))
           return;
-
-        FakeDragon oldDragon = getDragon(player, "");
 
         float health = oldDragon.health;
         String message = oldDragon.name;

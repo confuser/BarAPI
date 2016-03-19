@@ -17,11 +17,11 @@ import org.bukkit.Location;
 * @author James Mortemore
 */
 
-public class v1_8Fake extends FakeDragon {
+public class v1_8fake extends FakeDragon {
 	private Object dragon;
 	private int id;
 
-	public v1_8Fake(String name, Location loc) {
+	public v1_8fake(String name, Location loc) {
 		super(name, loc);
 	}
 
