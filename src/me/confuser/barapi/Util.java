@@ -49,7 +49,7 @@ public class Util {
         } else if (minor == 8) {
           fakeDragonClass = v1_8.class;
           isBelowGround = false;
-        } else if (minor == 9) {
+        } else if (minor >= 9) {
           fakeDragonClass = v1_9.class;
         }
       }
