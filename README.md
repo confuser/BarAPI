@@ -29,7 +29,7 @@
 <div class="code-wrapper" data-lexer="html"><div class="markup-code"><pre><span class="nt">&lt;repositories&gt;</span>
 	<span class="nt">&lt;repository&gt;</span>
 		<span class="nt">&lt;id&gt;</span>confuser-repo<span class="nt">&lt;/id&gt;</span>
-		<span class="nt">&lt;url&gt;</span>http://ci.frostcast.net/plugin/repository/everything<span class="nt">&lt;/url&gt;</span>
+		<span class="nt">&lt;url&gt;</span>https://ci.frostcast.net/plugin/repository/everything<span class="nt">&lt;/url&gt;</span>
 	<span class="nt">&lt;/repository&gt;</span>
 <span class="nt">&lt;/repositories&gt;</span>
 
@@ -37,7 +37,7 @@
 	<span class="nt">&lt;dependency&gt;</span>
 		<span class="nt">&lt;groupId&gt;</span>me.confuser<span class="nt">&lt;/groupId&gt;</span>
 		<span class="nt">&lt;artifactId&gt;</span>BarAPI<span class="nt">&lt;/artifactId&gt;</span>
-		<span class="nt">&lt;version&gt;</span>3.0<span class="nt">&lt;/version&gt;</span>
+		<span class="nt">&lt;version&gt;</span>3.5<span class="nt">&lt;/version&gt;</span>
 	<span class="nt">&lt;/dependency&gt;</span>
 <span class="nt">&lt;/dependencies&gt;</span>
 </pre></div>
